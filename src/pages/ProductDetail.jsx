@@ -1,12 +1,18 @@
+import { useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useProducto } from '../hooks/useProducto'
-import { Star, ShoppingCart, ArrowLeft } from 'lucide-react'
+import { useCart } from '../store/useCart'
+import { formatPrice } from '../utils/format'
+import { toast } from 'sonner'
+import { Star, ShoppingCart, ArrowLeft, Plus, Minus } from 'lucide-react'
 
 // vista detallada de un producto
 function ProductDetail() {
   const { id } = useParams()
   const navigate = useNavigate()
   const { product, loading, error } = useProducto(id)
+  const { addItem } = useCart()
+  const [quantity, setQuantity] = useState(1)
 
   if (loading) {
     return (
@@ -34,6 +40,13 @@ function ProductDetail() {
 
   const rating = Math.round(product.rating?.rate || 0)
   const reviews = product.rating?.count || 0
+
+  function handleAddToCart() {
+    addItem(product, quantity)
+    toast.success('Producto añadido al carrito', {
+      description: `${quantity} x ${product.title}`,
+    })
+  }
 
   return (
     <section className="fade-in space-y-6">
@@ -76,21 +89,38 @@ function ProductDetail() {
           </div>
 
           <p className="text-3xl font-bold text-blue-primary">
-            ${product.price.toFixed(2)}
+            {formatPrice(product.price)}
           </p>
 
           <p className="text-gray-300 leading-relaxed">{product.description}</p>
 
-          <button
-            onClick={() => {
-              // Lógica del carrito en Fase 4
-              console.log('Añadir al carrito:', product.id)
-            }}
-            className="flex items-center gap-2 px-6 py-3 bg-emerald-primary hover:bg-emerald-hover text-white rounded-lg font-medium transition"
-          >
-            <ShoppingCart size={20} />
-            Añadir al carrito
-          </button>
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3 bg-dark-navy rounded-lg px-3 py-2 border border-white/20">
+              <button
+                onClick={() => setQuantity((q) => Math.max(1, q - 1))}
+                className="p-1 hover:bg-white/10 rounded transition"
+                aria-label="Disminuir cantidad"
+              >
+                <Minus size={16} />
+              </button>
+              <span className="w-8 text-center font-medium">{quantity}</span>
+              <button
+                onClick={() => setQuantity((q) => q + 1)}
+                className="p-1 hover:bg-white/10 rounded transition"
+                aria-label="Aumentar cantidad"
+              >
+                <Plus size={16} />
+              </button>
+            </div>
+
+            <button
+              onClick={handleAddToCart}
+              className="flex items-center gap-2 px-6 py-3 bg-emerald-primary hover:bg-emerald-hover text-white rounded-lg font-medium transition"
+            >
+              <ShoppingCart size={20} />
+              Añadir al carrito
+            </button>
+          </div>
         </div>
       </div>
     </section>

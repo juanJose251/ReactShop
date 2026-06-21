@@ -1,5 +1,6 @@
 import { NavLink, Link, Outlet } from 'react-router-dom'
 import { ShoppingCart, Home, Package, CreditCard } from 'lucide-react'
+import { useCart } from '../store/useCart'
 
 const navItems = [
   { to: '/', label: 'Inicio', icon: Home },
@@ -9,6 +10,8 @@ const navItems = [
 ]
 
 function Layout() {
+  const { totalItems } = useCart()
+
   return (
     <div className="min-h-screen flex flex-col bg-dark-navy text-white font-sans">
       <header className="bg-dark-card shadow-md sticky top-0 z-50">
@@ -20,12 +23,13 @@ function Layout() {
           <ul className="flex flex-wrap gap-2">
             {navItems.map((item) => {
               const Icon = item.icon
+              const isCart = item.to === '/cart'
               return (
                 <li key={item.to}>
                   <NavLink
                     to={item.to}
                     className={({ isActive }) =>
-                      `flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200 ${
+                      `relative flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200 ${
                         isActive
                           ? 'bg-blue-primary text-white'
                           : 'text-gray-300 hover:bg-white/10 hover:text-white'
@@ -34,6 +38,11 @@ function Layout() {
                   >
                     <Icon size={16} />
                     {item.label}
+                    {isCart && totalItems > 0 && (
+                      <span className="absolute -top-1 -right-1 flex items-center justify-center min-w-[18px] h-[18px] px-1 text-[10px] font-bold bg-emerald-primary text-white rounded-full">
+                        {totalItems}
+                      </span>
+                    )}
                   </NavLink>
                 </li>
               )
