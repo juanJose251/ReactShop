@@ -1,11 +1,11 @@
 import ProductCard from './ProductCard'
 
 // grilla de productos
-function ProductGrid({ products }) {
+function ProductGrid({ products, emptyMessage = 'No hay productos disponibles.' }) {
   if (products.length === 0) {
     return (
       <div className="container-card text-center text-gray-300">
-        No hay productos disponibles.
+        {emptyMessage}
       </div>
     )
   }
