@@ -1,5 +1,5 @@
 import { NavLink, Link, Outlet } from 'react-router-dom'
-import { ShoppingCart, Home, Package, CreditCard } from 'lucide-react'
+import { ShoppingCart, Home, Package, CreditCard, History } from 'lucide-react'
 import { useCart } from '../store/useCart'
 
 const navItems = [
@@ -7,6 +7,7 @@ const navItems = [
   { to: '/products', label: 'Productos', icon: Package },
   { to: '/cart', label: 'Carrito', icon: ShoppingCart },
   { to: '/checkout', label: 'Checkout', icon: CreditCard },
+  { to: '/orders', label: 'Órdenes', icon: History },
 ]
 
 function Layout() {

@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useCart } from '../store/useCart'
+import { useOrders } from '../hooks/useOrders'
 import { formatPrice } from '../utils/format'
 import { toast } from 'sonner'
 import { CheckCircle, ArrowLeft, CreditCard, User, MapPin } from 'lucide-react'
@@ -8,6 +9,7 @@ import { CheckCircle, ArrowLeft, CreditCard, User, MapPin } from 'lucide-react'
 // formulario de compra y resumen del pedido
 function Checkout() {
   const { cartItems, totalPrice, clearCart } = useCart()
+  const { addOrder } = useOrders()
   const navigate = useNavigate()
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [form, setForm] = useState({
@@ -44,11 +46,16 @@ function Checkout() {
     setIsSubmitting(true)
 
     setTimeout(() => {
+      addOrder({
+        items: cartItems,
+        totalPrice,
+        shipping: { ...form },
+      })
       toast.success('¡Compra realizada con éxito!', {
         description: `Pedido por ${formatPrice(totalPrice)}`,
       })
       clearCart()
-      navigate('/')
+      navigate('/orders')
       setIsSubmitting(false)
     }, 1500)
   }
