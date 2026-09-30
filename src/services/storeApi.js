@@ -1,7 +1,7 @@
-// Api url
+// url de la api
 const API_URL = 'https://fakestoreapi.com'
 
-// products request 
+// pedir todos los productos
 export async function fetchProducts() {
   const response = await fetch(`${API_URL}/products`)
 
@@ -11,7 +11,7 @@ export async function fetchProducts() {
 
   return response.json()
 }
-// product resquest id
+// pedir un producto por id
 export async function fetchProduct(id) {
   const response = await fetch(`${API_URL}/products/${id}`)
 
@@ -21,13 +21,12 @@ export async function fetchProduct(id) {
 
   return response.json()
 }
-// category request 
+// pedir las categorias
 export async function fetchCategories() {
   const response = await fetch(`${API_URL}/products/categories`)
 
   if (!response.ok) {
     throw new Error('Error al obtener las categorías')
   }
-// convert responde to json
   return response.json()
 }

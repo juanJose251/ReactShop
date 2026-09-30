@@ -1,16 +1,50 @@
-# React + Vite
+# ReactShop
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Online store front end made with React. It uses the [Fake Store API](https://fakestoreapi.com/) for the products, and the cart and the orders are saved in the browser with localStorage.
 
-Currently, two official plugins are available:
+I made it to practice React Router, Context + useReducer and consuming a REST API.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+**Demo:** _coming soon_
 
-## React Compiler
+## Features
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- Product list with search by name and filter by category
+- Product detail page with rating and quantity selector
+- Shopping cart: add, remove, change quantity, total price
+- The cart is saved in localStorage, so it is still there if you reload the page
+- Checkout form (simulated, no real payment)
+- Order history page
+- Loading skeletons while the products load and toast notifications
 
-## Expanding the ESLint configuration
+## Tech stack
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- React 19 + Vite
+- React Router
+- Tailwind CSS
+- Context API + useReducer for the cart
+- Fake Store API
+- lucide-react (icons) and sonner (toasts)
+
+## Project structure
+
+```
+src/
+  components/   layout, product card, grid, search and filter bar
+  hooks/        useProductos, useProducto, useOrders
+  pages/        Home, Products, ProductDetail, Cart, Checkout, Orders
+  services/     storeApi.js (fetch calls to the API)
+  store/        cart context, provider (reducer) and useCart hook
+```
+
+## Run it locally
+
+```bash
+npm install
+npm run dev
+```
+
+## Things I want to add
+
+- Tests for the cart reducer
+- Pagination or infinite scroll in the product list
+- A real backend for the orders
