@@ -1,21 +1,10 @@
 import { useState, useCallback } from 'react'
+import { readJSON, writeJSON } from '../utils/storage'
 
 const STORAGE_KEY = 'shop_orders'
 
-// cargar pedidos del localStorage
-function loadOrders() {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY)
-    return raw ? JSON.parse(raw) : []
-  } catch {
-    return []
-  }
-}
-
-// guardar pedidos en localStorage
-function saveOrders(orders) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(orders))
-}
+const loadOrders = () => readJSON(STORAGE_KEY, [])
+const saveOrders = (orders) => writeJSON(STORAGE_KEY, orders)
 
 // hook para manejar historial de pedidos
 export function useOrders() {

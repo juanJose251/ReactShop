@@ -1,65 +1,26 @@
 import { useReducer, useEffect, useMemo } from 'react'
 import { CartContext } from './cartContext'
+import { cartReducer, sumItems, sumPrice } from './cartReducer'
+import { readJSON, writeJSON } from '../utils/storage'
 
 const STORAGE_KEY = 'shop_cart'
 
-function loadCart() {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY)
-    return raw ? JSON.parse(raw) : []
-  } catch {
-    return []
-  }
-}
-
-function saveCart(cart) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(cart))
-}
-
-function cartReducer(state, action) {
-  switch (action.type) {
-    case 'ADD_ITEM': {
-      const existing = state.find((item) => item.id === action.payload.id)
-      if (existing) {
-        return state.map((item) =>
-          item.id === action.payload.id
-            ? { ...item, quantity: item.quantity + action.payload.quantity }
-            : item,
-        )
-      }
-      return [...state, action.payload]
-    }
-    case 'REMOVE_ITEM':
-      return state.filter((item) => item.id !== action.payload)
-    case 'UPDATE_QUANTITY':
-      return action.payload.quantity <= 0
-        ? state.filter((item) => item.id !== action.payload.id)
-        : state.map((item) =>
-            item.id === action.payload.id
-              ? { ...item, quantity: action.payload.quantity }
-              : item,
-          )
-    case 'CLEAR_CART':
-      return []
-    default:
-      return state
-  }
-}
+const loadCart = () => readJSON(STORAGE_KEY, [])
 
 export function CartProvider({ children }) {
   const [cartItems, dispatch] = useReducer(cartReducer, [], loadCart)
 
   useEffect(() => {
-    saveCart(cartItems)
+    writeJSON(STORAGE_KEY, cartItems)
   }, [cartItems])
 
   const totalItems = useMemo(
-    () => cartItems.reduce((sum, item) => sum + item.quantity, 0),
+    () => sumItems(cartItems),
     [cartItems],
   )
 
   const totalPrice = useMemo(
-    () => cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0),
+    () => sumPrice(cartItems),
     [cartItems],
   )
 
