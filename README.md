@@ -4,7 +4,7 @@ Online store front end made with React. It uses the [Fake Store API](https://fak
 
 I made it to practice React Router, Context + useReducer and consuming a REST API.
 
-**Demo:** _coming soon_
+**Demo:** https://instashopreact.netlify.app
 
 ## Features
 
